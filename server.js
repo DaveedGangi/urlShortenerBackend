@@ -5,6 +5,8 @@ const cors=require("cors");
 require("dotenv").config();
 const mongoUri=process.env.MONGO_URI;
 const port=process.env.PORT || 5000;
+const BASE_URL = process.env.BASE_URL || `http://localhost:${port}`;
+
 
 const app=express();
 app.use(express.json());
@@ -42,7 +44,7 @@ app.post("/longUrl",async(req,res)=>{
 
     if(itExistOriginalUrl){
 
-       return res.json({shortUrl:`http://localhost:5000/${itExistOriginalUrl.shortCode}`});
+       return res.json({shortUrl:`${BASE_URL}/${itExistOriginalUrl.shortCode}`});
     }
 
     try{
@@ -50,7 +52,7 @@ app.post("/longUrl",async(req,res)=>{
     const newUrl=new Url({shortCode,originalUrl:normalizedUrl});
     await newUrl.save();
 
-    return  res.json({shortUrl:`http://localhost:5000/${shortCode}`})
+    return  res.json({shortUrl:`${BASE_URL}/${shortCode}`})
     }
     catch{
        return res.status(400).json({error:"Invalid Url"});
